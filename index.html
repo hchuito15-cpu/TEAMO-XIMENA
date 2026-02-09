@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>San Valentín 💘</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffdee9, #b5fffc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .container {
+    text-align: center;
+    transition: opacity 1s ease, transform 1s ease;
+    z-index: 2;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+  }
+
+  button {
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+  }
+
+  #yesBtn {
+    background-color: #2ecc71;
+    color: white;
+    font-size: 1.3rem;
+  }
+
+  #noBtn {
+    background-color: #e74c3c;
+    color: white;
+    position: absolute; /* NECESARIO PARA QUE HUYA */
+  }
+
+
+  /* CONFETI */
+  .confetti {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  /* PANTALLA FINAL */
+  .final-screen {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    z-index: 5;
+    pointer-events: none; /* 🔑 ESTO ARREGLA TODO */
+  }
+
+
+  .final-screen.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+  }
+
+
+  .final-screen img {
+    max-width: 80%;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.5);
+  }
+
+  .final-screen img {
+  max-width: 300px;
+  width: 75%;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(255,255,255,0.5);
+  animation: pop 0.8s ease;
+}
+
+.final-screen p {
+  margin-top: 20px;
+  font-size: 2.2rem;
+  color: white;
+  text-shadow: 0 0 10px rgba(255,255,255,0.6);
+}
+
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+  .container {
+    position: relative;
+  }
+
+  .top-image {
+  width: 150px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite,
+           glow 2.5s ease-in-out infinite,
+           heartbeat 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.6));
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(255, 120, 150, 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
+  }
+}
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.08); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.4s;
+}
+
+
+.gradient-text {
+  font-size: 2.8rem;
+  font-weight: bold;
+  background: linear-gradient(
+    270deg,
+    #ff4d6d,
+    #ff758f,
+    #ffb3c6,
+    #ff4d6d
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 4s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container" id="main">
+  <img src="flor.JPG" class="top-image" alt="amor">
+  <h1 class="gradient-text">¿Quieres ser mi San Valentín? 💖</h1>
+  <button id="yesBtn">sipi</button>
+  <button id="noBtn">ño</button>
+</div>
+
+<div class="final-screen" id="final">
+  <img src="cuchurrumin.jpg">
+  <p>No te arrepentirás 💘</p>
+</div>
+
+<audio id="music" src="Valentine.mp3"></audio>
+
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const main = document.getElementById("main");
+  const final = document.getElementById("final");
+  const music = document.getElementById("music");
+
+  const frasesNo = [
+    "¿segura que no?",
+    "piénsalo bien",
+    "¿segura?",
+    "ándaleee",
+    "¿cómo que no?"
+  ];
+
+  let noClicks = 0;
+  const gravity = 0.35;
+
+  noBtn.addEventListener("click", () => {
+    noClicks++;
+    noBtn.textContent = frasesNo[noClicks % frasesNo.length];
+    yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+    noBtn.style.transform = `scale(${Math.max(0.4, 1 - noClicks * 0.1)})`;
+  });
+
+  noBtn.addEventListener("mouseenter", () => {
+  const container = document.querySelector(".container");
+  const rect = container.getBoundingClientRect();
+
+  const maxX = rect.width - noBtn.offsetWidth;
+  const maxY = rect.height - noBtn.offsetHeight;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+  });
+
+  function moveNoButton() {
+  const container = document.querySelector(".container");
+  const rect = container.getBoundingClientRect();
+
+  const maxX = rect.width - noBtn.offsetWidth;
+  const maxY = rect.height - noBtn.offsetHeight;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+
+  const img = document.querySelector(".top-image");
+  img.classList.add("shake");
+  setTimeout(() => img.classList.remove("shake"), 400);
+
+}
+
+/* 🖱️ PC */
+noBtn.addEventListener("mouseenter", moveNoButton);
+
+/* 📱 CELULAR */
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+
+  vibratePhone([80, 40, 80]); // 📳 vibra-vibra
+  moveNoButton();
+
+  noClicks++;
+  noBtn.textContent = frasesNo[noClicks % frasesNo.length];
+  yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+  noBtn.style.transform = `scale(${Math.max(0.4, 1 - noClicks * 0.1)})`;
+});
+
+
+
+
+
+
+
+
+  yesBtn.addEventListener("click", () => {
+    music.play();
+    explodeConfetti();
+
+    main.style.opacity = 0;
+    main.style.transform = "scale(0.95)";
+
+    setTimeout(() => {
+      main.style.display = "none";
+      final.classList.add("show");
+    }, 1000);
+
+    const img = document.querySelector(".top-image");
+    img.src = "corazon_final.png";
+
+  });
+
+  function explodeConfetti() {
+    const rect = yesBtn.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top;
+
+    for (let i = 0; i < 140; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+
+      const size = Math.random() * 12 + 8;
+      const type = Math.floor(Math.random() * 3);
+
+      if (type === 0) {
+        confetti.style.width = size + "px";
+        confetti.style.height = size + "px";
+        confetti.style.backgroundColor = `hsl(${Math.random()*360},80%,60%)`;
+      } else if (type === 1) {
+        confetti.textContent = "❤️";
+        confetti.style.fontSize = size + "px";
+      } else {
+        confetti.textContent = "⭐";
+        confetti.style.fontSize = size + "px";
+        confetti.style.color = ["#3498db","#2ecc71","#f1c40f","#9b59b6"][Math.floor(Math.random()*4)];
+      }
+
+      let x = originX;
+      let y = originY;
+      let vx = (Math.random() - 0.5) * 8;
+      let vy = -Math.random() * 12 - 8;
+
+      confetti.style.left = x + "px";
+      confetti.style.top = y + "px";
+
+      document.body.appendChild(confetti);
+
+      function animate() {
+        vy += gravity;
+        x += vx;
+        y += vy;
+
+        confetti.style.left = x + "px";
+        confetti.style.top = y + "px";
+
+        if (y < window.innerHeight + 20) {
+          requestAnimationFrame(animate);
+        }
+      }
+      animate();
+    }
+  }
+
+  function vibratePhone(pattern = [100]) {
+  if ("vibrate" in navigator) {
+    navigator.vibrate(pattern);
+  }
+
+}
+
+</script>
+
+</body>
+</html>
